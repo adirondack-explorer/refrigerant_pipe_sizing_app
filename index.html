@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daikin DCSA R-32 Refrigerant Pipe Sizing | Tristate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <img src="TriState_a_member_of_daikin_group_logo (white).png" alt="Tristate – a member of Daikin group"
+        class="logo" />
+      <div class="header-title">
+        <h1>Daikin DCSA R-32 Refrigerant Pipe Sizing</h1>
+        <p>Commercial Split System — 20 to 75 Tons</p>
+      </div>
+      <!-- Gear icon button -->
+      <button class="gear-btn" id="gearBtn" onclick="toggleSettings()" title="Design Conditions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>Design Conditions</span>
+      </button>
+    </div>
+
+    <!-- Settings Dropdown Panel -->
+    <div class="settings-panel" id="settingsPanel">
+      <div class="settings-panel-inner">
+        <div class="settings-header">
+          <span>Design Conditions</span>
+          <button class="settings-close" onclick="toggleSettings()" title="Close">✕</button>
+        </div>
+        <div class="settings-body">
+          <div class="settings-grid">
+            <div class="field">
+              <label for="condensingTemp">Condensing Temperature (°F)</label>
+              <input type="number" id="condensingTemp" value="120" step="1" min="80" max="150" />
+            </div>
+            <div class="field">
+              <label for="sst">Saturated Suction Temp — SST (°F)</label>
+              <input type="number" id="sst" value="40" step="1" min="-20" max="50" />
+            </div>
+            <div class="field">
+              <label for="superheat">Superheat (°F)</label>
+              <input type="number" id="superheat" value="10" step="1" min="5" max="30" />
+            </div>
+            <div class="field">
+              <label for="subcooling">Subcooling (°F)</label>
+              <input type="number" id="subcooling" value="10" step="1" min="0" max="30" />
+            </div>
+          </div>
+          <div class="settings-defaults-row">
+            <button class="btn-defaults" onclick="resetDesignDefaults()">Reset to Defaults</button>
+            <span class="settings-hint">Defaults: CT 120°F · SST 40°F · SH 10°F · SC 10°F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Settings backdrop -->
+    <div class="settings-backdrop" id="settingsBackdrop" onclick="toggleSettings()"></div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+
+    <!-- ── JOB INFORMATION ── -->
+    <section class="card">
+      <h2 class="section-title">Job Information</h2>
+      <div class="grid-3">
+        <div class="field">
+          <label for="jobName">Job Name</label>
+          <input type="text" id="jobName" placeholder="e.g. Acme Office Building" />
+        </div>
+        <div class="field">
+          <label for="preparedBy">Prepared By</label>
+          <input type="text" id="preparedBy" placeholder="Engineer / Designer name" />
+        </div>
+        <div class="field">
+          <label for="jobDate">Date</label>
+          <input type="date" id="jobDate" />
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="field">
+          <label for="projectNumber">Project Number</label>
+          <input type="text" id="projectNumber" placeholder="Optional" />
+        </div>
+        <div class="field">
+          <label for="dcsamodel">DCSA Model</label>
+          <select id="dcsamodel" onchange="onModelChange()">
+            <option value="">— Select Model —</option>
+            <option value="DCSA020">DCSA 020 (20 Ton)</option>
+            <option value="DCSA025">DCSA 025 (25 Ton)</option>
+            <option value="DCSA030">DCSA 030 (30 Ton)</option>
+            <option value="DCSA034">DCSA 034 (34 Ton)</option>
+            <option value="DCSA035">DCSA 035 (35 Ton)</option>
+            <option value="DCSA040">DCSA 040 (40 Ton)</option>
+            <option value="DCSA045">DCSA 045 (45 Ton)</option>
+            <option value="DCSA050">DCSA 050 (50 Ton)</option>
+            <option value="DCSA052">DCSA 052 (52 Ton)</option>
+            <option value="DCSA055">DCSA 055 (55 Ton)</option>
+            <option value="DCSA060">DCSA 060 (60 Ton)</option>
+            <option value="DCSA068">DCSA 068 (68 Ton)</option>
+            <option value="DCSA075">DCSA 075 (75 Ton)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="efficiencyLevel">Efficiency Level</label>
+          <select id="efficiencyLevel" onchange="onModelChange()">
+            <option value="Standard">Standard</option>
+            <option value="High">High</option>
+            <option value="Premium">Premium</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="totalCapacity">Total Unit Cooling (Tons)</label>
+          <input type="number" id="totalCapacity" placeholder="e.g. 40" step="0.5" min="10" max="200" />
+        </div>
+      </div>
+
+      <!-- Minimum connection size info box (populated by JS on model change) -->
+      <div class="info-box conn-size-box" id="connSizeBox" style="display:none;">
+        <strong>Table 6 — DCSA Connection Sizes (minimums):</strong>
+        <span id="connSizeText"></span>
+        <span class="conn-size-note">Pipe may not be sized smaller than these connection sizes.</span>
+      </div>
+
+      <!-- Elevation difference input -->
+      <div class="elevation-row">
+        <div class="elevation-fields">
+          <div class="field">
+            <label for="elevDiff">Elevation Diff (ft)</label>
+            <input type="number" id="elevDiff" value="0" step="1" min="-200" max="200" />
+          </div>
+          <div class="field">
+            <label for="elevDir">Evaporator is</label>
+            <select id="elevDir">
+              <option value="above">Above condenser (+ve pressure drop)</option>
+              <option value="below">Below condenser (−ve pressure drop)</option>
+              <option value="level">Level with condenser (No elevation drop)</option>
+            </select>
+          </div>
+          <div class="elev-note">
+            Elevation affects liquid line subcooling margin. Enter 0 if units are at the same level.
+          </div>
+        </div>
+      </div>
+      <!-- Altitude and DX Coil Charge (A2L specific) -->
+      <div class="grid-3" style="margin-top: 14px;">
+        <div class="field">
+          <label for="altitude">Altitude (ft)</label>
+          <input type="number" id="altitude" value="0" step="100" min="0" max="15000" />
+        </div>
+        <div class="field">
+          <label for="dxCoilCharge">DX Coil R32 Charge (lbs) / Circuit</label>
+          <input type="number" id="dxCoilCharge" value="0" step="0.1" min="0" max="100" />
+          <small>Required for A2L min area.</small>
+        </div>
+      </div>
+
+      <!-- Safety Overrides -->
+      <div class="info-box warning" style="margin-top: 16px; background-color: #fff3f3; border-color: #ffcccc;">
+        <h4 style="margin: 0 0 10px 0; color: #d32f2f;">A2L Mandatory Safety Constraints</h4>
+        <label
+          style="display:flex; align-items:center; gap:8px; text-transform:none; font-weight:normal; color:#333; margin-bottom: 8px;">
+          <input type="checkbox" id="constraintUnderground" required />
+          I confirm there is <strong>NO underground piping</strong>. (Never allowed)
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; text-transform:none; font-weight:normal; color:#333;">
+          <input type="checkbox" id="constraintRetrofit" required />
+          I confirm this is <strong>NOT a retrofit</strong> of an A1 system. (New evaporators and piping required)
+        </label>
+      </div>
+      <div class="info-box">
+        <strong>Note:</strong> All DCSA models have two equal refrigerant circuits. Pipe sizes are calculated and
+        displayed per circuit (half total capacity per circuit). &nbsp;|&nbsp; <strong>Max pipe run:</strong> 150 ft
+        actual length (suction &amp; liquid). Max vertical: 60 ft. Exceeding these limits voids warranty (Daikin IM
+        1402).
+      </div>
+    </section>
+
+    <!-- ── PIPE LINE TABS ── -->
+    <section class="card tab-card">
+
+      <!-- Tab buttons -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-ll" onclick="switchTab('ll')">
+          <span class="tab-icon">&#9472;</span> Liquid Line
+        </button>
+        <button class="tab-btn" id="tab-slh" onclick="switchTab('slh')">
+          <span class="tab-icon">&#8593;</span> Suction — Horizontal
+        </button>
+        <button class="tab-btn" id="tab-slv" onclick="switchTab('slv')">
+          <span class="tab-icon">&#8593;&#8593;</span> Suction — Vertical Riser
+        </button>
+        <button class="tab-btn" id="tab-dl" onclick="switchTab('dl')">
+          <span class="tab-icon">&#8594;</span> Discharge (MHGRH)
+        </button>
+      </div>
+
+      <!-- ── TAB: LIQUID LINE ── -->
+      <div class="tab-panel active" id="panel-ll">
+        <p class="tab-subtitle">Per circuit &nbsp;·&nbsp; Velocity limit &lt; 300 ft/min</p>
+        <div class="grid-3">
+          <div class="field">
+            <label for="llLength">Straight Pipe Length (ft)</label>
+            <input type="number" id="llLength" value="60" step="1" min="1" max="500" />
+          </div>
+        </div>
+        <h3 class="sub-title">Fittings</h3>
+        <div class="fittings-grid">
+          <div class="fitting-row fitting-header">
+            <span>Fitting Type</span>
+            <span>Qty</span>
+          </div>
+          <div class="fitting-row">
+            <label>90° Standard Elbow</label>
+            <input type="number" id="ll_90std" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>90° Long Radius Elbow</label>
+            <input type="number" id="ll_90lr" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>45° Elbow</label>
+            <input type="number" id="ll_45" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Solenoid Valve</label>
+            <input type="number" id="ll_sol" value="1" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Filter Drier</label>
+            <input type="number" id="ll_drier" value="1" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Sight Glass</label>
+            <input type="number" id="ll_sight" value="1" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Gate Valve</label>
+            <input type="number" id="ll_gate" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Swing Check Valve</label>
+            <input type="number" id="ll_check" value="0" min="0" step="1" class="qty-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: SUCTION HORIZONTAL ── -->
+      <div class="tab-panel" id="panel-slh">
+        <p class="tab-subtitle">Per circuit &nbsp;·&nbsp; Sized at rated capacity &nbsp;·&nbsp; Min velocity ≥ 500
+          ft/min &nbsp;·&nbsp; Max ΔT ≤ 2°F</p>
+        <div class="grid-3">
+          <div class="field">
+            <label for="slhLength">Straight Pipe Length (ft)</label>
+            <input type="number" id="slhLength" value="50" step="1" min="1" max="500" />
+          </div>
+        </div>
+        <h3 class="sub-title">Fittings</h3>
+        <div class="fittings-grid">
+          <div class="fitting-row fitting-header">
+            <span>Fitting Type</span>
+            <span>Qty</span>
+          </div>
+          <div class="fitting-row">
+            <label>90° Standard Elbow</label>
+            <input type="number" id="slh_90std" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>90° Long Radius Elbow</label>
+            <input type="number" id="slh_90lr" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>45° Elbow</label>
+            <input type="number" id="slh_45" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Gate Valve</label>
+            <input type="number" id="slh_gate" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Swing Check Valve</label>
+            <input type="number" id="slh_check" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Suction Filter</label>
+            <input type="number" id="slh_filter" value="0" min="0" step="1" class="qty-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: SUCTION VERTICAL RISER ── -->
+      <div class="tab-panel" id="panel-slv">
+        <p class="tab-subtitle">Per circuit &nbsp;·&nbsp; Sized at minimum capacity for oil return &nbsp;·&nbsp; Min
+          velocity ≥ 1,000 ft/min</p>
+        <div class="info-box warning">
+          <strong>Oil Return:</strong> Vertical suction risers must maintain ≥ 1,000 ft/min at <em>minimum</em> circuit
+          capacity to ensure oil return. The riser is sized for minimum capacity; the horizontal run is sized for
+          maximum (rated) capacity.
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label for="slvLength">Riser Height (ft)</label>
+            <input type="number" id="slvLength" value="10" step="1" min="0" max="200" />
+          </div>
+          <div class="field">
+            <label for="minCapacityPct">Minimum Compressor Capacity (%)</label>
+            <input type="number" id="minCapacityPct" value="25" step="5" min="10" max="100" />
+            <small>Typical variable speed minimum: 25%</small>
+          </div>
+        </div>
+        <h3 class="sub-title">Fittings</h3>
+        <div class="fittings-grid">
+          <div class="fitting-row fitting-header">
+            <span>Fitting Type</span>
+            <span>Qty</span>
+          </div>
+          <div class="fitting-row">
+            <label>90° Standard Elbow</label>
+            <input type="number" id="slv_90std" value="2" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>90° Long Radius Elbow</label>
+            <input type="number" id="slv_90lr" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>45° Elbow</label>
+            <input type="number" id="slv_45" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Swing Check Valve</label>
+            <input type="number" id="slv_check" value="0" min="0" step="1" class="qty-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: DISCHARGE LINE ── -->
+      <div class="tab-panel" id="panel-dl">
+        <p class="tab-subtitle">Per circuit &nbsp;·&nbsp; Velocity ≤ 3,500 ft/min &nbsp;·&nbsp; Min velocity ≥ 500
+          ft/min</p>
+        <div class="info-box warning">
+          <strong>Modulating Hot Gas Reheat:</strong> Size discharge piping to maintain proper oil-return velocity (500
+          FPM horizontal / 1,000 FPM vertical minimums). Target friction pressure drop under roughly 5 PSI.
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label for="dlLength">Straight Pipe Length (ft)</label>
+            <input type="number" id="dlLength" value="0" step="1" min="0" max="500" />
+            <small>Leave at 0 if no MHGRH</small>
+          </div>
+        </div>
+        <h3 class="sub-title">Fittings</h3>
+        <div class="fittings-grid">
+          <div class="fitting-row fitting-header">
+            <span>Fitting Type</span>
+            <span>Qty</span>
+          </div>
+          <div class="fitting-row">
+            <label>90° Standard Elbow</label>
+            <input type="number" id="dl_90std" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>90° Long Radius Elbow</label>
+            <input type="number" id="dl_90lr" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>45° Elbow</label>
+            <input type="number" id="dl_45" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Solenoid Valve</label>
+            <input type="number" id="dl_sol" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Gate Valve</label>
+            <input type="number" id="dl_gate" value="0" min="0" step="1" class="qty-input" />
+          </div>
+          <div class="fitting-row">
+            <label>Swing Check Valve</label>
+            <input type="number" id="dl_check" value="0" min="0" step="1" class="qty-input" />
+          </div>
+        </div>
+      </div>
+
+    </section>
+    <!-- end tab card -->
+
+    <!-- ── CALCULATE BUTTON ── -->
+    <div class="calc-btn-row">
+      <button class="btn-primary" onclick="calculate()">Calculate Pipe Sizes</button>
+      <button class="btn-secondary" onclick="clearForm()">Clear / Reset</button>
+    </div>
+
+    <!-- ── RESULTS ── -->
+    <section class="card results-card" id="resultsSection" style="display:none;">
+      <h2 class="section-title">Results — Per Circuit</h2>
+
+      <div class="results-grid">
+
+        <!-- Liquid Line Result -->
+        <div class="result-block">
+          <div class="result-label">Liquid Line</div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+            <label for="llOverride" style="font-size:0.8rem; font-weight:600; color:#555;">Manual Override:</label>
+            <select id="llOverride" onchange="calculate()">
+              <option value="">— Auto —</option>
+              <option value="0.375">3/8"</option>
+              <option value="0.5">1/2"</option>
+              <option value="0.625">5/8"</option>
+              <option value="0.875">7/8"</option>
+              <option value="1.125">1-1/8"</option>
+              <option value="1.375">1-3/8"</option>
+              <option value="1.625">1-5/8"</option>
+              <option value="2.125">2-1/8"</option>
+              <option value="2.625">2-5/8"</option>
+              <option value="3.125">3-1/8"</option>
+              <option value="3.625">3-5/8"</option>
+              <option value="4.125">4-1/8"</option>
+            </select>
+          </div>
+          <div style="width:100%;"></div>
+          <div class="result-size" id="res_ll_size">—</div>
+          <div class="result-details" id="res_ll_details"></div>
+          <div class="result-status" id="res_ll_status"></div>
+        </div>
+
+        <!-- Suction Horizontal Result -->
+        <div class="result-block">
+          <div class="result-label">Suction Line — Horizontal</div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+            <label for="slhOverride" style="font-size:0.8rem; font-weight:600; color:#555;">Manual Override:</label>
+            <select id="slhOverride" onchange="calculate()">
+              <option value="">— Auto —</option>
+              <option value="0.375">3/8"</option>
+              <option value="0.5">1/2"</option>
+              <option value="0.625">5/8"</option>
+              <option value="0.875">7/8"</option>
+              <option value="1.125">1-1/8"</option>
+              <option value="1.375">1-3/8"</option>
+              <option value="1.625">1-5/8"</option>
+              <option value="2.125">2-1/8"</option>
+              <option value="2.625">2-5/8"</option>
+              <option value="3.125">3-1/8"</option>
+              <option value="3.625">3-5/8"</option>
+              <option value="4.125">4-1/8"</option>
+            </select>
+          </div>
+          <div style="width:100%;"></div>
+          <div class="result-size" id="res_slh_size">—</div>
+          <div class="result-details" id="res_slh_details"></div>
+          <div class="result-status" id="res_slh_status"></div>
+        </div>
+
+        <!-- Suction Vertical Result -->
+        <div class="result-block">
+          <div class="result-label">Suction Line — Vertical Riser</div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+            <label for="slvOverride" style="font-size:0.8rem; font-weight:600; color:#555;">Manual Override:</label>
+            <select id="slvOverride" onchange="calculate()">
+              <option value="">— Auto —</option>
+              <option value="0.375">3/8"</option>
+              <option value="0.5">1/2"</option>
+              <option value="0.625">5/8"</option>
+              <option value="0.875">7/8"</option>
+              <option value="1.125">1-1/8"</option>
+              <option value="1.375">1-3/8"</option>
+              <option value="1.625">1-5/8"</option>
+              <option value="2.125">2-1/8"</option>
+              <option value="2.625">2-5/8"</option>
+              <option value="3.125">3-1/8"</option>
+              <option value="3.625">3-5/8"</option>
+              <option value="4.125">4-1/8"</option>
+            </select>
+          </div>
+          <div style="width:100%;"></div>
+          <div class="result-size" id="res_slv_size">—</div>
+          <div class="result-details" id="res_slv_details"></div>
+          <div class="result-status" id="res_slv_status"></div>
+        </div>
+
+        <!-- Discharge Line Result -->
+        <div class="result-block" id="res_dl_block" style="display:none;">
+          <div class="result-label">Discharge Line (MHGRH)</div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+            <label for="dlOverride" style="font-size:0.8rem; font-weight:600; color:#555;">Manual Override:</label>
+            <select id="dlOverride" onchange="calculate()">
+              <option value="">— Auto —</option>
+              <option value="0.375">3/8"</option>
+              <option value="0.5">1/2"</option>
+              <option value="0.625">5/8"</option>
+              <option value="0.875">7/8"</option>
+              <option value="1.125">1-1/8"</option>
+              <option value="1.375">1-3/8"</option>
+              <option value="1.625">1-5/8"</option>
+              <option value="2.125">2-1/8"</option>
+              <option value="2.625">2-5/8"</option>
+              <option value="3.125">3-1/8"</option>
+              <option value="3.625">3-5/8"</option>
+              <option value="4.125">4-1/8"</option>
+            </select>
+          </div>
+          <div style="width:100%;"></div>
+          <div class="result-size" id="res_dl_size">—</div>
+          <div class="result-details" id="res_dl_details"></div>
+          <div class="result-status" id="res_dl_status"></div>
+        </div>
+
+      </div>
+
+      <!-- Design Summary -->
+      <div class="design-summary" id="designSummary"></div>
+
+      <!-- Refrigerant Charge Estimate -->
+      <div class="charge-box" id="chargeBox" style="display:none;"></div>
+
+      <!-- Warnings -->
+      <div id="warningsBox" class="warnings-box" style="display:none;"></div>
+
+      <!-- Print Button -->
+      <div class="print-btn-row">
+        <button class="btn-primary" onclick="window.print()">Print / Save Report</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PRINT REPORT (hidden on screen, visible when printing) -->
+  <div class="print-report" id="printReport">
+    <div class="print-header">
+      <img src="TriState_a_member_of_daikin_group_logo.png" alt="Tristate" class="print-logo" />
+      <div class="print-title-block">
+        <h1>Daikin DCSA R-32 Refrigerant Pipe Sizing Report</h1>
+        <p id="pr_jobline"></p>
+      </div>
+    </div>
+    <hr class="print-divider" />
+
+    <!-- Section 1: System Design & Connections -->
+    <div class="print-section">
+      <h2 style="background-color: var(--blue-mid); color: white; padding: 6px;">Section 1: System Design &amp;
+        Connections</h2>
+      <div class="print-table" id="pr_jobinfo"></div>
+      <div id="pr_section_1_body" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Section 2: A2L Safety & Minimum Room Area -->
+    <div class="print-section">
+      <h2 style="background-color: var(--blue-mid); color: white; padding: 6px;">Section 2: A2L Safety &amp; Minimum
+        Room Area</h2>
+      <div id="pr_section_2_body" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Section 3: Leak Testing & Evacuation Procedure -->
+    <div class="print-section">
+      <h2 style="background-color: var(--blue-mid); color: white; padding: 6px;">Section 3: Leak Testing &amp;
+        Evacuation Procedure</h2>
+      <div id="pr_section_3_body" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Section 4: Charging Procedure & Performance Tuning -->
+    <div class="print-section">
+      <h2 style="background-color: var(--blue-mid); color: white; padding: 6px;">Section 4: Charging Procedure &amp;
+        Performance Tuning</h2>
+      <div id="pr_section_4_body" style="margin-top: 15px;"></div>
+    </div>
+
+    <div class="print-footer">
+      <p>Generated by Tristate Refrigerant Pipe Sizing Tool &nbsp;|&nbsp; <span id="pr_date"></span></p>
+      <p>Based on ASHRAE Handbook of Refrigeration methodology. All pipe sizes are Type L copper (ACR). Verify against
+        applicable codes and Daikin installation requirements.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>Tristate — a member of Daikin Group &nbsp;|&nbsp; Daikin DCSA R-32 Pipe Sizing Tool &nbsp;|&nbsp; For qualified
+      HVAC professionals only</p>
+  </footer>
+
+  <script src="r32data.js?v=8"></script>
+  <script src="calc.js?v=8"></script>
+  <script>
+    // Set today's date as default
+    document.getElementById('jobDate').valueAsDate = new Date();
+
+    // ── Tab switching ──
+    function switchTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+    }
+
+    // ── Settings panel ──
+    function toggleSettings() {
+      const panel = document.getElementById('settingsPanel');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('gearBtn');
+      const open = panel.classList.toggle('open');
+      backdrop.classList.toggle('open', open);
+      btn.classList.toggle('active', open);
+    }
+
+    function resetDesignDefaults() {
+      document.getElementById('condensingTemp').value = 120;
+      document.getElementById('sst').value = 40;
+      document.getElementById('superheat').value = 10;
+      document.getElementById('subcooling').value = 10;
+    }
+
+    // Close settings on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const panel = document.getElementById('settingsPanel');
+        if (panel.classList.contains('open')) toggleSettings();
+      }
+    });
+
+    // ── Model / efficiency change → show Table 6 connection sizes ──
+    function onModelChange() {
+      const modelVal = document.getElementById('dcsamodel').value;
+      const eff = document.getElementById('efficiencyLevel').value;
+      const box = document.getElementById('connSizeBox');
+      const txt = document.getElementById('connSizeText');
+      if (!modelVal) { box.style.display = 'none'; return; }
+      const num = parseInt(modelVal.replace('DCSA', ''));
+      const sizes = DCSATABLE6[getModelGroup(num)] && DCSATABLE6[getModelGroup(num)][eff];
+      if (!sizes) { box.style.display = 'none'; return; }
+      box.style.display = '';
+      txt.innerHTML = `&nbsp; Ckt 1 Suction: <strong>${sizes.c1s}"</strong> &nbsp;|&nbsp; Ckt 1 Liquid: <strong>${sizes.c1l}"</strong> &nbsp;|&nbsp; Ckt 2 Suction: <strong>${sizes.c2s}"</strong> &nbsp;|&nbsp; Ckt 2 Liquid: <strong>${sizes.c2l}"</strong>`;
+    }
+  </script>
+
+</body>
+
+</html>

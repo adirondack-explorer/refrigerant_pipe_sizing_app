@@ -1,0 +1,12 @@
+# Cowork OS config
+CLAUDE.md
+MEMORY.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.sw?
